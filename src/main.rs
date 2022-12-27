@@ -14,9 +14,9 @@ async fn main() -> std::io::Result<()> {
     let connection = sqlite::open("data.sqlite").unwrap();
 
     let query = "
-    CREATE TABLE users (name TEXT, age INTEGER);
-    INSERT INTO users VALUES ('Alice', 42);
-    INSERT INTO users VALUES ('Bob', 69);
+    create table if not exists users (name text, age integer);
+    insert into users values ('Alice', 42);
+    insert into users values ('Bob', 69);
 ";
 
     connection.execute(query).unwrap();
@@ -36,7 +36,9 @@ async fn main() -> std::io::Result<()> {
             )
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
-            .service(routes::hello)
+            .service(routes::announcements)
+            .service(routes::rss)
+            .service(routes::active)
             .service(Files::new("/images", "static/images/").show_files_listing())
             .service(Files::new("/", "./static/root/").index_file("index.html"))
     })
