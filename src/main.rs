@@ -11,6 +11,16 @@ static SESSION_SIGNING_KEY: &[u8] = &[0; 64]; // Just an example
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let connection = sqlite::open("data.sqlite").unwrap();
+
+    let query = "
+    CREATE TABLE users (name TEXT, age INTEGER);
+    INSERT INTO users VALUES ('Alice', 42);
+    INSERT INTO users VALUES ('Bob', 69);
+";
+
+    connection.execute(query).unwrap();
+
     env_logger::init_from_env(Env::default().default_filter_or("info"));
     let key = actix_web::cookie::Key::from(SESSION_SIGNING_KEY);
 
