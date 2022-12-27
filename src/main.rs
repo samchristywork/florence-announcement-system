@@ -17,6 +17,7 @@ async fn main() -> std::io::Result<()> {
     create table if not exists users (name text, age integer);
     insert into users values ('Alice', 42);
     insert into users values ('Bob', 69);
+    insert into users values ('Charlie', 69);
 ";
 
     connection.execute(query).unwrap();
@@ -36,6 +37,7 @@ async fn main() -> std::io::Result<()> {
             )
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
+            .service(routes::hello)
             .service(routes::announcements)
             .service(routes::rss)
             .service(routes::active)
