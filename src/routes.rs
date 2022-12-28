@@ -1,3 +1,4 @@
+use crate::announcement::Announcement;
 use actix_web::{get, web, Responder};
 use sqlite::State;
 
@@ -28,8 +29,22 @@ async fn announcements() -> impl Responder {
 
     connection.execute(query).unwrap();
 
-    format!(
-        "<div class='announcement-{}'>
+    let mut ret = String::new();
+
+    let mut announcements = Vec::new();
+
+    announcements.push(Announcement::new(
+        "title",
+        "body",
+        "created",
+        "scheduled",
+        "id",
+        "approved",
+    ));
+
+    for announcement in announcements {
+        ret += format!(
+            "<div class='announcement-{}'>
     <div class='date'>
       <div>Created: {}</div>
       <div>Scheduled: {}</div>
@@ -41,8 +56,17 @@ async fn announcements() -> impl Responder {
     <button style='color:red'>Deny</button>
     <div class='id'>{}</div>
   </div>",
-        "approved", "somedate", "anotherdate", "MyTitle", "MyBody", "MyID"
-    )
+            announcement.status,
+            announcement.created,
+            announcement.scheduled,
+            announcement.title,
+            announcement.body,
+            announcement.id,
+        )
+        .as_str();
+    }
+
+    ret
 }
 
 #[get("/rss")]

@@ -5,6 +5,7 @@ use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer};
 use env_logger::Env;
 
+mod announcement;
 mod routes;
 
 static SESSION_SIGNING_KEY: &[u8] = &[0; 64]; // Just an example
