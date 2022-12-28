@@ -1,6 +1,21 @@
+:root {
+  --neutral-foreground: #000;
+  --neutral-background: #999;
+  --neutral-body: #111;
+  --neutral-id: #444;
+  --approved-foreground: #020;
+  --approved-background: #9a9;
+  --approved-body: #131;
+  --approved-id: #464;
+  --denied-foreground: #400;
+  --denied-background: #c99;
+  --denied-body: #511;
+  --denied-id: #844;
+}
+
 .announcement-neutral {
-  color: #000;
-  background: #999;
+  color: var(--neutral-foreground);
+  background: var(--neutral-background);
   border-radius: 1em;
   border: 1px solid #777;
   margin: 1em auto;
@@ -17,7 +32,7 @@
 
 .announcement-neutral > .body {
   font-size: 0.8rem;
-  color: #111;
+  color: var(--neutral-body);
   padding: 1em;
 }
 
@@ -33,15 +48,15 @@
 }
 
 .announcement-neutral > .id {
-  color: #444;
+  color: var(--neutral-id);
   font-size: 0.6rem;
   position: absolute;
   right: 2em;
 }
 
 .announcement-approved {
-  color: #020;
-  background: #9a9;
+  color: var(--approved-foreground);
+  background: var(--approved-background);
   border-radius: 1em;
   border: 1px solid #797;
   margin: 1em auto;
@@ -57,7 +72,7 @@
 
 .announcement-approved > .body {
   font-size: 0.8rem;
-  color: #131;
+  color: var(--approved-body);
   padding: 1em;
 }
 
@@ -73,15 +88,15 @@
 }
 
 .announcement-approved > .id {
-  color: #464;
+  color: var(--approved-id);
   font-size: 0.6rem;
   position: absolute;
   right: 2em;
 }
 
 .announcement-denied {
-  color: #400;
-  background: #c99;
+  color: var(--denied-foreground);
+  background: var(--denied-background);
   border-radius: 1em;
   border: 1px solid #b77;
   margin: 1em auto;
@@ -97,7 +112,7 @@
 
 .announcement-denied > .body {
   font-size: 0.8rem;
-  color: #511;
+  color: var(--denied-body);
   padding: 1em;
 }
 
@@ -113,7 +128,7 @@
 }
 
 .announcement-denied > .id {
-  color: #844;
+  color: var(--denied-id);
   font-size: 0.6rem;
   position: absolute;
   right: 2em;
