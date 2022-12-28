@@ -28,7 +28,21 @@ async fn announcements() -> impl Responder {
 
     connection.execute(query).unwrap();
 
-    format!("Stub (announcements)")
+    format!(
+        "<div class='announcement-{}'>
+    <div class='date'>
+      <div>Created: {}</div>
+      <div>Scheduled: {}</div>
+    </div>
+    <div class='title'>{}</div>
+    <div class='body'>{}</div>
+    <button style='color:green'>Approve</button>
+    <button style='color:#770'>Schedule</button>
+    <button style='color:red'>Deny</button>
+    <div class='id'>{}</div>
+  </div>",
+        "approved", "somedate", "anotherdate", "MyTitle", "MyBody", "MyID"
+    )
 }
 
 #[get("/rss")]
