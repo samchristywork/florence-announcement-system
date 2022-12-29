@@ -61,3 +61,25 @@ function update_announcement(id, field, current) {
       });
 }
 
+function set_state(id, state) {
+  const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          "field": "status",
+          "content": state,
+        }
+      )
+  };
+
+  fetch('./announcements/update/'+id, options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
