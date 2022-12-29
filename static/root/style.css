@@ -11,9 +11,15 @@
   --denied-background: #c99;
   --denied-body: #511;
   --denied-id: #844;
+  --background: #ffe;
+}
+
+body {
+  background-color: var(--background);
 }
 
 .announcement-neutral {
+  position: relative;
   color: var(--neutral-foreground);
   background: var(--neutral-background);
   border-radius: 1em;
@@ -55,6 +61,8 @@
 }
 
 .announcement-approved {
+  position: relative;
+  color: var(--neutral-foreground);
   color: var(--approved-foreground);
   background: var(--approved-background);
   border-radius: 1em;
@@ -95,6 +103,8 @@
 }
 
 .announcement-denied {
+  position: relative;
+  color: var(--neutral-foreground);
   color: var(--denied-foreground);
   background: var(--denied-background);
   border-radius: 1em;
@@ -132,4 +142,14 @@
   font-size: 0.6rem;
   position: absolute;
   right: 2em;
+}
+
+.add-button {
+  background-color: var(--approved-background);
+  color: var(--approved-foreground);
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-radius: 1em;
 }
