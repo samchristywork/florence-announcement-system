@@ -104,42 +104,28 @@ async fn announcements_delete(
     "Delete successful"
 }
 
-    let mut announcements = Vec::new();
+#[derive(Deserialize)]
+struct Change {
+    field: String,
+    content: String,
+}
 
-    announcements.push(Announcement::new(
-        "title",
-        "body",
-        "created",
-        "scheduled",
-        "id",
-        "approved",
-    ));
+#[post("/announcements/update/{id}")]
+async fn announcements_update(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    id: web::Path<String>,
+    change: web::Json<Change>,
+) -> impl Responder {
+    let sql = format!(
+        "update announcements set {} = \"{}\" where id = \"{}\";",
+        change.field,
+        change.content,
+        id.to_string()
+    );
 
-    for announcement in announcements {
-        ret += format!(
-            "<div class='announcement-{}'>
-    <div class='date'>
-      <div>Created: {}</div>
-      <div>Scheduled: {}</div>
-    </div>
-    <div class='title'>{}</div>
-    <div class='body'>{}</div>
-    <button style='color:green'>Approve</button>
-    <button style='color:#770'>Schedule</button>
-    <button style='color:red'>Deny</button>
-    <div class='id'>{}</div>
-  </div>",
-            announcement.status,
-            announcement.created,
-            announcement.scheduled,
-            announcement.title,
-            announcement.body,
-            announcement.id,
-        )
-        .as_str();
-    }
+    pool.get().unwrap().execute(sql.as_str(), []).unwrap();
 
-    ret
+    "Change successful"
 }
 
 #[get("/rss")]
