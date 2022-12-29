@@ -83,3 +83,14 @@ function set_state(id, state) {
       });
 }
 
+function delete_announcement(id) {
+  const options = {
+      method: 'POST',
+  };
+
+  fetch('./announcements/delete/'+id, options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
