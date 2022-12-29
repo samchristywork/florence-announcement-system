@@ -1,20 +1,23 @@
-pub struct Announcement<'a> {
-    pub title: &'a str,
-    pub body: &'a str,
-    pub created: &'a str,
-    pub scheduled: &'a str,
-    pub id: &'a str,
-    pub status: &'a str,
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+pub struct Announcement {
+    pub title: String,
+    pub body: String,
+    pub created: String,
+    pub scheduled: String,
+    pub id: String,
+    pub status: String,
 }
 
-impl<'a> Announcement<'a> {
+impl Announcement {
     pub fn new(
-        title: &'a str,
-        body: &'a str,
-        created: &'a str,
-        scheduled: &'a str,
-        id: &'a str,
-        status: &'a str,
+        title: String,
+        body: String,
+        created: String,
+        scheduled: String,
+        id: String,
+        status: String,
     ) -> Self {
         Self {
             title,
