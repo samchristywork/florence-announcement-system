@@ -61,11 +61,35 @@ async fn announcements_list(
     ret
 }
 
-#[get("/announcements")]
-async fn announcements() -> impl Responder {
-    let connection = sqlite::open("data.sqlite").unwrap();
+#[post("/announcements/add")]
+async fn announcements_add(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    announcement: web::Json<Announcement>,
+) -> impl Responder {
+    pool.get()
+        .unwrap()
+        .execute(
+            "insert into announcements values (
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?
+                );",
+            [
+                &announcement.status,
+                &announcement.created,
+                &announcement.scheduled,
+                &announcement.title,
+                &announcement.body,
+                &announcement.id,
+            ],
+        )
+        .unwrap();
 
-    let query = "insert into users values ('Test', 42);";
+    "Add successful"
+}
 
     connection.execute(query).unwrap();
 
