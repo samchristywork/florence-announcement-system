@@ -91,9 +91,18 @@ async fn announcements_add(
     "Add successful"
 }
 
-    connection.execute(query).unwrap();
+#[post("/announcements/delete/{id}")]
+async fn announcements_delete(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    id: web::Path<String>,
+) -> impl Responder {
+    pool.get()
+        .unwrap()
+        .execute("delete from announcements where id=?", [id.as_str()])
+        .unwrap();
 
-    let mut ret = String::new();
+    "Delete successful"
+}
 
     let mut announcements = Vec::new();
 
