@@ -8,9 +8,10 @@ async fn hello(name: web::Path<String>) -> impl Responder {
     format!("Hello {name}!")
 }
 
-#[get("/announcements/list")]
+#[get("/announcements/list/{publish_status}")]
 async fn announcements_list(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    publish_status: web::Path<String>,
 ) -> impl Responder {
     let mut ret = String::new();
 
@@ -21,6 +22,15 @@ async fn announcements_list(
             [count],
             |row| {
                 let id = row.get::<usize, String>(5).unwrap();
+                let status = row.get::<usize, String>(0).unwrap();
+
+                if publish_status.to_string() == "published" && status != "published" {
+                    return Ok(());
+                }
+
+                if publish_status.to_string() == "unpublished" && status == "published" {
+                    return Ok(());
+                }
 
                 ret += format!(
                     "<div class='announcement-{}'>

@@ -11,6 +11,10 @@
   --denied-background: #c99;
   --denied-body: #511;
   --denied-id: #844;
+  --published-foreground: #000;
+  --published-background: #999;
+  --published-body: #111;
+  --published-id: #444;
   --background: #ffe;
 }
 
@@ -62,7 +66,6 @@ body {
 
 .announcement-approved {
   position: relative;
-  color: var(--neutral-foreground);
   color: var(--approved-foreground);
   background: var(--approved-background);
   border-radius: 1em;
@@ -104,7 +107,6 @@ body {
 
 .announcement-denied {
   position: relative;
-  color: var(--neutral-foreground);
   color: var(--denied-foreground);
   background: var(--denied-background);
   border-radius: 1em;
@@ -139,6 +141,47 @@ body {
 
 .announcement-denied > .id {
   color: var(--denied-id);
+  font-size: 0.6rem;
+  position: absolute;
+  right: 2em;
+}
+
+.announcement-published {
+  position: relative;
+  color: var(--published-foreground);
+  background: var(--published-background);
+  border-radius: 1em;
+  border: 1px solid #777;
+  margin: 1em auto;
+  padding: 1em;
+}
+
+.announcement-published > .title::before {
+  content: "Published: ";
+}
+.announcement-published > .title {
+  font-size: 1.2rem;
+}
+
+.announcement-published > .body {
+  font-size: 0.8rem;
+  color: var(--published-body);
+  padding: 1em;
+}
+
+.announcement-published > .date {
+  font-size: 0.6rem;
+  text-align: right;
+  position: absolute;
+  right: 2em;
+}
+
+.announcement-published > .id::before {
+  content:"id:"
+}
+
+.announcement-published > .id {
+  color: var(--published-id);
   font-size: 0.6rem;
   position: absolute;
   right: 2em;

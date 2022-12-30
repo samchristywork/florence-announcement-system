@@ -1,10 +1,15 @@
 let unpublished = document.querySelector("#announcements-unpublished");
 let published = document.querySelector("#announcements-published");
 
-fetch("./announcements/list")
+fetch("./announcements/list/unpublished")
   .then(response => response.text())
   .then(data => {
     unpublished.innerHTML = data
+  });
+
+fetch("./announcements/list/published")
+  .then(response => response.text())
+  .then(data => {
     published.innerHTML = data
   });
 
