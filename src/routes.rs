@@ -45,6 +45,7 @@ async fn announcements_list(
         <button style='color:red' onclick='set_state(\"{id}\", \"denied\")'>Deny</button>
         <button style='color:maroon' onclick='delete_announcement(\"{id}\")'>Delete</button>
         <button style='color:blue'>Hide</button>
+        <button style='color:purple' onclick='set_state(\"{id}\", \"published\")'>Publish</button>
         <div class='id'>{id}</div>
       </div>",
                     row.get::<usize, String>(0).unwrap(), // status
