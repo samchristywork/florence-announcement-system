@@ -26,7 +26,8 @@ async fn main() -> std::io::Result<()> {
         scheduled text,
         title text,
         body text,
-        id text
+        id text,
+        expires text
     );
     ";
 

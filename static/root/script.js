@@ -18,6 +18,9 @@ function add_announcement() {
   let body = window.prompt("Please enter an annoucement body:", "Some Body");
 
   var d = new Date();
+  var d_plus_five = new Date(d);
+  d_plus_five.setDate(d_plus_five.getDate() + 5);
+
   const options = {
       method: 'POST',
       headers: {
@@ -32,6 +35,7 @@ function add_announcement() {
           "scheduled": "--",
           "id": Math.random().toString(16).substr(2, 8),
           "status": "neutral",
+          "expires": d_plus_five.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT",
         }
       )
   };

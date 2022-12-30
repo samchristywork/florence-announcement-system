@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Announcement {
     pub title: String,
     pub body: String,
@@ -8,6 +8,7 @@ pub struct Announcement {
     pub scheduled: String,
     pub id: String,
     pub status: String,
+    pub expires: String,
 }
 
 impl Announcement {
@@ -18,6 +19,7 @@ impl Announcement {
         scheduled: String,
         id: String,
         status: String,
+        expires: String,
     ) -> Self {
         Self {
             title,
@@ -26,6 +28,7 @@ impl Announcement {
             scheduled,
             id,
             status,
+            expires,
         }
     }
 }

@@ -36,6 +36,7 @@ async fn announcements_list(
                     "<div class='announcement-{}'>
         <div class='date'>
           <div>Created: {}</div>
+          <div>Expires: {}</div>
           <div>Scheduled: {}</div>
         </div>
         <div class='title' onclick='update_announcement(\"{id}\", \"title\", \"{}\")'>{}</div>
@@ -50,6 +51,7 @@ async fn announcements_list(
       </div>",
                     row.get::<usize, String>(0).unwrap(), // status
                     row.get::<usize, String>(1).unwrap(), // created
+                    row.get::<usize, String>(6).unwrap(), // expires
                     row.get::<usize, String>(2).unwrap(), // scheduled
                     row.get::<usize, String>(3).unwrap(), // title
                     row.get::<usize, String>(3).unwrap(), // title
@@ -86,6 +88,7 @@ async fn announcements_add(
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
                 );",
             [
@@ -95,6 +98,7 @@ async fn announcements_add(
                 &announcement.title,
                 &announcement.body,
                 &announcement.id,
+                &announcement.expires,
             ],
         )
         .unwrap();
