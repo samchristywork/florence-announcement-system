@@ -97,9 +97,11 @@ function delete_announcement(id) {
       method: 'POST',
   };
 
-  fetch('./announcements/delete/'+id, options)
-      .then(response => response.text())
-      .then(response => {
-        location.reload();
-      });
+  if (window.confirm("Are you sure you want to delete this announcement?")) {
+    fetch('./announcements/delete/'+id, options)
+        .then(response => response.text())
+        .then(response => {
+          location.reload();
+        });
+  }
 }
