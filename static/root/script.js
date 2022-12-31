@@ -87,6 +87,27 @@ function add_announcement() {
       });
 }
 
+function recur_daily(id) {
+  let answer = window.prompt("Enter time in 24-hour format (e.g. 14:30 for 2:30 pm)");
+  answer = answer.split(":");
+
+  if (answer.length != 2) {
+    window.alert("Invalid input");
+    return;
+  }
+
+  let d = new Date();
+  d.setHours(answer[0]);
+  d.setMinutes(answer[1]);
+
+  if (d=="Invalid date") {
+    window.alert("Invalid input");
+    return;
+  }
+
+  window.alert(d);
+}
+
 function update_expiration(id) {
   var d = new Date();
   d = d.toLocaleString('en-US', { timeZone: 'America/Chicago' });
