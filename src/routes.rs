@@ -74,6 +74,45 @@ async fn announcements_list(
     ret
 }
 
+#[get("/announcements/json/")]
+async fn announcements_json(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+) -> impl Responder {
+    let mut ret: Vec<Announcement> = Vec::new();
+
+    let mut count = 0;
+    loop {
+        match pool.get().unwrap().query_row(
+            "select * from announcements limit 1 offset ?",
+            [count],
+            |row| {
+                let announcement = Announcement::new(
+                    row.get::<usize, String>(3).unwrap(), // title
+                    row.get::<usize, String>(4).unwrap(), // body
+                    row.get::<usize, String>(1).unwrap(), // created
+                    row.get::<usize, String>(2).unwrap(), // scheduled
+                    row.get::<usize, String>(5).unwrap(), // id
+                    row.get::<usize, String>(0).unwrap(), // status
+                    row.get::<usize, String>(6).unwrap(), // expires
+                );
+
+                ret.push(announcement);
+
+                Ok(())
+            },
+        ) {
+            Ok(_) => {}
+            Err(_) => break,
+        }
+
+        count += 1;
+
+        ()
+    }
+
+    web::Json(ret)
+}
+
 #[post("/announcements/add")]
 async fn announcements_add(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,

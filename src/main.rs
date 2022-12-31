@@ -56,6 +56,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::new("%a %{User-Agent}i"))
             .service(routes::hello)
             .service(routes::announcements_list)
+            .service(routes::announcements_json)
             .service(routes::announcements_add)
             .service(routes::announcements_delete)
             .service(routes::announcements_update)
