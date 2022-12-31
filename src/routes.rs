@@ -235,6 +235,19 @@ async fn announcements_delete(
     "Delete successful"
 }
 
+#[post("/recurring/delete/{id}")]
+async fn recurring_delete(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    id: web::Path<String>,
+) -> impl Responder {
+    pool.get()
+        .unwrap()
+        .execute("delete from recurring where id=?", [id.as_str()])
+        .unwrap();
+
+    "Delete successful"
+}
+
 #[derive(Deserialize)]
 struct Change {
     field: String,
