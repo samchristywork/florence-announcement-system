@@ -4,9 +4,54 @@ use actix_web::{get, post, web, Responder};
 use serde::Deserialize;
 use std::sync::Arc;
 
-#[get("/hello/{name}")]
-async fn hello(name: web::Path<String>) -> impl Responder {
-    format!("Hello {name}!")
+#[get("/recurring/list")]
+async fn recurring_list(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+) -> impl Responder {
+    let mut ret = String::new();
+
+    let mut count = 0;
+    loop {
+        match pool.get().unwrap().query_row(
+            "select * from recurring limit 1 offset ?",
+            [count],
+            |row| {
+                let id = row.get::<usize, String>(0).unwrap();
+                let title = row.get::<usize, String>(1).unwrap();
+                let body = row.get::<usize, String>(2).unwrap();
+                let created = row.get::<usize, String>(3).unwrap();
+                let mode = row.get::<usize, String>(4).unwrap();
+                let time_frame = row.get::<usize, String>(5).unwrap();
+
+                ret += format!(
+                    "<div class='recurring'>
+        <div class='date'>
+          <div>Created: {created}</div>
+        </div>
+        <div class='title' onclick='update_recurring(\"{id}\", \"title\", \"{title}\")'>{title}</div>
+        <div class='body' onclick='update_recurring(\"{id}\", \"body\", \"{body}\")'>{body}</div>
+        <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>{mode} * Happens Every Tuesday, triggered next at Sat Dec 31 12:56:52 AM CST 2022</div>
+        <button style='color:Red' onclick='recur_daily(\"{id}\")'>Daily</button>
+        <button style='color:Orange' onclick='recur_weekly(\"{id}\")'>Weekly</button>
+        <button style='color:#770' onclick='recur_monthly(\"{id}\")'>Monthly</button>
+        <button style='color:Green' onclick='recur_yearly(\"{id}\")'>Yearly</button>
+        <button style='color:maroon' onclick='delete_recur(\"{id}\")'>Delete</button>
+        <div class='id'>{id}</div>
+      </div>")
+                .as_str();
+
+                Ok(())
+            },
+        ) {
+            Ok(_) => {}
+            Err(_) => break,
+        }
+
+        count += 1;
+
+        ()
+    }
+    ret
 }
 
 #[get("/announcements/list/{publish_status}")]
