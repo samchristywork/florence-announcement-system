@@ -47,6 +47,35 @@ function add_announcement() {
       });
 }
 
+function update_schedule(id) {
+  var d = new Date();
+  d = d.toLocaleString('en-US', { timeZone: 'America/Chicago' });
+
+  let content = window.prompt("Please enter a new date Ex: (2023/10/12):", d);
+  content = new Date(content);
+  content = content.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT";
+
+  const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          "field": "scheduled",
+          "content": content,
+        }
+      )
+  };
+
+  fetch('./announcements/update/'+id, options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
 function update_announcement(id, field, current) {
   let content = window.prompt("Please enter a new " + field + " for the announcement:", current);
   const options = {
