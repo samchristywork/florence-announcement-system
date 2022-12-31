@@ -20,9 +20,42 @@ fetch("./recurring/list")
     recurring.innerHTML = data
   });
 
+function add_recurring() {
+  let title = window.prompt("Please enter a title for the recurring task:", "Some Title");
+  let body = window.prompt("Please enter a recurring task body:", "Some Body");
+
+  var d = new Date();
+  var d_plus_five = new Date(d);
+  d_plus_five.setDate(d_plus_five.getDate() + 5);
+
+  const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          "id": Math.random().toString(16).substr(2, 8),
+          "title": title,
+          "body": body,
+          "created": d.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT",
+          "mode": "daily",
+          "time_frame": "2:00",
+        }
+      )
+  };
+
+  fetch('./recurring/add', options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
 function add_announcement() {
   let title = window.prompt("Please enter a title for the announcement:", "Some Title");
-  let body = window.prompt("Please enter an annoucement body:", "Some Body");
+  let body = window.prompt("Please enter an announcement body:", "Some Body");
 
   var d = new Date();
   var d_plus_five = new Date(d);
