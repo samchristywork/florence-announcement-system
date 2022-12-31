@@ -43,6 +43,7 @@ async fn announcements_list(
         <div class='body' onclick='update_announcement(\"{id}\", \"body\", \"{}\")'>{}</div>
         <button style='color:green' onclick='set_state(\"{id}\", \"approved\")'>Approve</button>
         <button style='color:#770' onclick='update_schedule(\"{id}\")'>Schedule</button>
+        <button style='color:orange' onclick='update_expiration(\"{id}\")'>Set Expiration</button>
         <button style='color:red' onclick='set_state(\"{id}\", \"denied\")'>Deny</button>
         <button style='color:maroon' onclick='delete_announcement(\"{id}\")'>Delete</button>
         <button style='color:blue'>Hide</button>

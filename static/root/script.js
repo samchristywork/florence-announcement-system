@@ -47,6 +47,37 @@ function add_announcement() {
       });
 }
 
+function update_expiration(id) {
+  var d = new Date();
+  d = d.toLocaleString('en-US', { timeZone: 'America/Chicago' });
+  var d_plus_five = new Date(d);
+  d_plus_five.setDate(d_plus_five.getDate() + 5);
+
+  let content = window.prompt("Please enter a new date Ex: (2023/10/12):", d_plus_five);
+  content = new Date(content);
+  content = content.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT";
+
+  const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          "field": "expires",
+          "content": content,
+        }
+      )
+  };
+
+  fetch('./announcements/update/'+id, options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
 function update_schedule(id) {
   var d = new Date();
   d = d.toLocaleString('en-US', { timeZone: 'America/Chicago' });
