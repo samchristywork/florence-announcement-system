@@ -160,6 +160,36 @@ async fn announcements_json(
     web::Json(ret)
 }
 
+#[post("/recurring/add")]
+async fn recurring_add(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    recurring: web::Json<Recurring>,
+) -> impl Responder {
+    pool.get()
+        .unwrap()
+        .execute(
+            "insert into recurring values (
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?
+                );",
+            [
+                &recurring.id,
+                &recurring.title,
+                &recurring.body,
+                &recurring.created,
+                &recurring.mode,
+                &recurring.time_frame,
+            ],
+        )
+        .unwrap();
+
+    "Add successful"
+}
+
 #[post("/announcements/add")]
 async fn announcements_add(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
