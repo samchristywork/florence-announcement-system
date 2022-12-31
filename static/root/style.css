@@ -15,6 +15,10 @@
   --published-background: #999;
   --published-body: #111;
   --published-id: #444;
+  --recurring-foreground: #000;
+  --recurring-background: #999;
+  --recurring-body: #111;
+  --recurring-id: #444;
   --background: #ffe;
 }
 
@@ -182,6 +186,47 @@ body {
 
 .announcement-published > .id {
   color: var(--published-id);
+  font-size: 0.6rem;
+  position: absolute;
+  right: 2em;
+}
+
+.recurring {
+  position: relative;
+  color: var(--recurring-foreground);
+  background: var(--recurring-background);
+  border-radius: 1em;
+  border: 1px solid #777;
+  margin: 1em auto;
+  padding: 1em;
+}
+
+.recurring > .title::before {
+  content: "Recurring: ";
+}
+.recurring > .title {
+  font-size: 1.2rem;
+}
+
+.recurring > .body {
+  font-size: 0.8rem;
+  color: var(--recurring-body);
+  padding: 1em;
+}
+
+.recurring > .date {
+  font-size: 0.6rem;
+  text-align: right;
+  position: absolute;
+  right: 2em;
+}
+
+.recurring > .id::before {
+  content:"id:"
+}
+
+.recurring > .id {
+  color: var(--recurring-id);
   font-size: 0.6rem;
   position: absolute;
   right: 2em;

@@ -7,6 +7,7 @@ use r2d2_sqlite::SqliteConnectionManager;
 use std::sync::Arc;
 
 mod announcement;
+mod recurring;
 mod routes;
 
 static SESSION_SIGNING_KEY: &[u8] = &[0; 64]; // Just an example
@@ -28,6 +29,15 @@ async fn main() -> std::io::Result<()> {
         body text,
         id text,
         expires text
+    );
+
+    create table if not exists recurring (
+        id text,
+        title text,
+        body text,
+        created text,
+        mode text,
+        time_frame text
     );
     ";
 
@@ -54,14 +64,16 @@ async fn main() -> std::io::Result<()> {
             )
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
-            .service(routes::hello)
-            .service(routes::announcements_list)
-            .service(routes::announcements_json)
+            .service(routes::active)
             .service(routes::announcements_add)
             .service(routes::announcements_delete)
+            .service(routes::announcements_json)
+            .service(routes::announcements_list)
             .service(routes::announcements_update)
+            .service(routes::recurring_add)
+            .service(routes::recurring_delete)
+            .service(routes::recurring_list)
             .service(routes::rss)
-            .service(routes::active)
             .service(Files::new("/images", "static/images/").show_files_listing())
             .service(Files::new("/", "./static/root/").index_file("index.html"))
     })

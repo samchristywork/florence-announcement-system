@@ -1,4 +1,5 @@
 use crate::announcement::Announcement;
+use crate::recurring::Recurring;
 use actix_web::{get, post, web, Responder};
 use serde::Deserialize;
 use std::sync::Arc;
