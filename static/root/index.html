@@ -10,7 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 1em;">
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 1em;">
+    <div>
+      <h1 style="text-align:center; color: grey; font-family: sans-serif">Recurring</h1>
+      <div style="text-align:center">
+      <button class="add-button" onclick="add_recurring()">Add Recurring</button>
+      </div>
+      <div id="recurring"></div>
+    </div>
     <div>
       <h1 style="text-align:center; color: grey; font-family: sans-serif">Unpublished</h1>
       <div style="text-align:center">

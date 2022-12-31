@@ -1,5 +1,6 @@
 let unpublished = document.querySelector("#announcements-unpublished");
 let published = document.querySelector("#announcements-published");
+let recurring = document.querySelector("#recurring");
 
 fetch("./announcements/list/unpublished")
   .then(response => response.text())
@@ -11,6 +12,12 @@ fetch("./announcements/list/published")
   .then(response => response.text())
   .then(data => {
     published.innerHTML = data
+  });
+
+fetch("./recurring/list")
+  .then(response => response.text())
+  .then(data => {
+    recurring.innerHTML = data
   });
 
 function add_announcement() {
