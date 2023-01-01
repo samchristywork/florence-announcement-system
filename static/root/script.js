@@ -226,3 +226,17 @@ function delete_announcement(id) {
         });
   }
 }
+
+function delete_recur(id) {
+  const options = {
+      method: 'POST',
+  };
+
+  if (window.confirm("Are you sure you want to delete this recurring task?")) {
+    fetch('./recurring/delete/'+id, options)
+        .then(response => response.text())
+        .then(response => {
+          location.reload();
+        });
+  }
+}
