@@ -191,6 +191,29 @@ function update_announcement(id, field, current) {
       });
 }
 
+function update_recurring(id, field, current) {
+  let content = window.prompt("Please enter a new " + field + " for the recurring task:", current);
+  const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          "field": field,
+          "content": content,
+        }
+      )
+  };
+
+  fetch('./recurring/update/'+id, options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
 function set_state(id, state) {
   const options = {
       method: 'POST',
