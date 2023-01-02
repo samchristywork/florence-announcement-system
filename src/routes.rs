@@ -24,11 +24,15 @@ async fn recurring_list(
                 let mode = row.get::<usize, String>(4).unwrap();
                 let time_frame = row.get::<usize, String>(5).unwrap();
 
-                let now_plus_five = DateTime::parse_from_str(format!("{} +0600", created)
+                let mut next = DateTime::parse_from_str(format!("{} -0600", created)
                     .as_str(), "%m/%d/%Y, %l:%M:%S %p CT %z")
-                    .unwrap() + Duration::days(5);
+                    .unwrap();
 
-                let next = format!("{}", now_plus_five
+                while next < chrono::offset::Utc::now() {
+                    next = next + Duration::hours(1);
+                }
+
+                let next = format!("{}", next
                     .format("%-m/%-d/%Y, %l:%M:%S %p CT")
                     .to_string());
 
