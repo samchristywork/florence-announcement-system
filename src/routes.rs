@@ -286,6 +286,25 @@ async fn announcements_update(
     "Change successful"
 }
 
+#[post("/recurring/update/{id}")]
+async fn recurring_update(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    id: web::Path<String>,
+    change: web::Json<Change>,
+) -> impl Responder {
+    let sql = format!(
+        "update recurring set {} = \"{}\" where id = \"{}\";",
+        change.field,
+        change.content,
+        id.to_string()
+    );
+    println!("{}", sql);
+
+    pool.get().unwrap().execute(sql.as_str(), []).unwrap();
+
+    "Change successful"
+}
+
 #[get("/rss")]
 async fn rss() -> impl Responder {
     format!("Stub")

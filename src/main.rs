@@ -73,6 +73,7 @@ async fn main() -> std::io::Result<()> {
             .service(routes::recurring_add)
             .service(routes::recurring_delete)
             .service(routes::recurring_list)
+            .service(routes::recurring_update)
             .service(routes::rss)
             .service(Files::new("/images", "static/images/").show_files_listing())
             .service(Files::new("/", "./static/root/").index_file("index.html"))
