@@ -67,6 +67,7 @@ async fn main() -> std::io::Result<()> {
             .service(routes::active)
             .service(routes::announcements_add)
             .service(routes::announcements_delete)
+            .service(routes::announcements_hide)
             .service(routes::announcements_json)
             .service(routes::announcements_list)
             .service(routes::announcements_update)
