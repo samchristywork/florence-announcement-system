@@ -23,33 +23,59 @@ async fn recurring_list(
                 let created = row.get::<usize, String>(3).unwrap();
                 let mode = row.get::<usize, String>(4).unwrap();
                 let time_frame = row.get::<usize, String>(5).unwrap();
+                let hide = row.get::<usize, String>(6).unwrap();
 
                 let mut next = DateTime::parse_from_str(format!("{} -0600", created)
                     .as_str(), "%m/%d/%Y, %l:%M:%S %p CT %z")
                     .unwrap();
 
+                let words = time_frame.split(" ").collect::<Vec<&str>>();
+
                 while next < chrono::offset::Utc::now() {
-                    next = next + Duration::hours(1);
+                    next = next + Duration::days(1);
                 }
 
-                let next = format!("{}", next
+                let mut found = false;
+
+                if words.get(0).unwrap()==&"Every" {
+                    for _ in 1..60 {
+                        if words.get(1).unwrap().eq(&next.format("%A").to_string().as_str()) {
+                            println!("{}", words.get(1).unwrap());
+                            found = true;
+                            break;
+                        }
+
+                        next = next + Duration::days(1);
+                    }
+                }
+
+                let mut next = format!("{}", next
                     .format("%-m/%-d/%Y, %l:%M:%S %p CT")
                     .to_string());
 
+                if !found {
+                    next = String::new() + "Incalculable";
+                }
+
+                let view_class = match hide.as_str() {
+                    "true" => "recur-hidden",
+                    _ => "",
+                };
+
                 ret += format!(
-                    "<div class='recurring'>
+                    "<div class='recurring {view_class}'>
         <div class='date'>
           <div>From: {created}</div>
           <div>Next: {next}</div>
         </div>
-        <div class='title' onclick='update_recurring(\"{id}\", \"title\", \"{title}\")'>{title}</div>
+        <div style='display: grid; grid-template-columns: 1fr 1fr'>
+          <div class='title' onclick='update_recurring(\"{id}\", \"title\", \"{title}\")'>{title}</div>
+        </div>
         <div class='body' onclick='update_recurring(\"{id}\", \"body\", \"{body}\")'>{body}</div>
-        <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>{time_frame}</div>
-        <button style='color:Red' onclick='recur_daily(\"{id}\")'>Daily</button>
-        <button style='color:Orange' onclick='recur_weekly(\"{id}\")'>Weekly</button>
-        <button style='color:#770' onclick='recur_monthly(\"{id}\")'>Monthly</button>
-        <button style='color:Green' onclick='recur_yearly(\"{id}\")'>Yearly</button>
+        <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>Time Frame: {time_frame}</div>
         <button style='color:maroon' onclick='delete_recur(\"{id}\")'>Delete</button>
+        <button style='color:blue' onclick='hide_recurring(\"{id}\")'>Hide</button>
+        <button style='color:blue' onclick='unhide_recurring(\"{id}\")' class='unhide'>Unhide</button>
         <div class='id'>{id}</div>
       </div>")
                 .as_str();
