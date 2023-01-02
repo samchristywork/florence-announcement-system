@@ -40,7 +40,11 @@ async fn recurring_list(
                 if words.get(0).unwrap()==&"Every" {
                     for _ in 1..60 {
                         if words.get(1).unwrap().eq(&next.format("%A").to_string().as_str()) {
-                            println!("{}", words.get(1).unwrap());
+                            found = true;
+                            break;
+                        }
+
+                        if words.get(1).unwrap().eq(&next.format("%e").to_string().as_str()) {
                             found = true;
                             break;
                         }
