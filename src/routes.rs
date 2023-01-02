@@ -77,6 +77,8 @@ async fn recurring_list(
         </div>
         <div class='body' onclick='update_recurring(\"{id}\", \"body\", \"{body}\")'>{body}</div>
         <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>Time Frame: {time_frame}</div>
+        <button style='color:Green' onclick=''>Set Start Date</button>
+        <button style='color:Orange' onclick=''>Set Expiration</button>
         <button style='color:maroon' onclick='delete_recur(\"{id}\")'>Delete</button>
         <button style='color:blue' onclick='hide_recurring(\"{id}\")'>Hide</button>
         <button style='color:blue' onclick='unhide_recurring(\"{id}\")' class='unhide'>Unhide</button>
@@ -327,12 +329,8 @@ async fn recurring_hide(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
     param: web::Path<(String, String)>,
 ) -> impl Responder {
-    println!("HERE");
-
     let id = param.0.as_str();
     let value = param.1.as_str();
-
-    println!("{} {}", id, value);
 
     pool.get()
         .unwrap()
@@ -410,7 +408,6 @@ async fn recurring_update(
         change.content,
         id.to_string()
     );
-    println!("{}", sql);
 
     pool.get().unwrap().execute(sql.as_str(), []).unwrap();
 
