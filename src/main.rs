@@ -73,6 +73,7 @@ async fn main() -> std::io::Result<()> {
             .service(routes::announcements_update)
             .service(routes::recurring_add)
             .service(routes::recurring_delete)
+            .service(routes::recurring_hide)
             .service(routes::recurring_list)
             .service(routes::recurring_update)
             .service(routes::rss)

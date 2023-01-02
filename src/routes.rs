@@ -249,6 +249,26 @@ async fn announcements_delete(
     "Delete successful"
 }
 
+#[post("/recurring/hide/{id}/{value}")]
+async fn recurring_hide(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+    param: web::Path<(String, String)>,
+) -> impl Responder {
+    println!("HERE");
+
+    let id = param.0.as_str();
+    let value = param.1.as_str();
+
+    println!("{} {}", id, value);
+
+    pool.get()
+        .unwrap()
+        .execute("update recurring set hidden=?1 where id=?2", (value, id))
+        .unwrap();
+
+    "Hide successful"
+}
+
 #[post("/announcements/hide/{id}/{value}")]
 async fn announcements_hide(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
