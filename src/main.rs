@@ -28,7 +28,8 @@ async fn main() -> std::io::Result<()> {
         title text,
         body text,
         id text,
-        expires text
+        expires text,
+        hidden text
     );
 
     create table if not exists recurring (
@@ -37,7 +38,8 @@ async fn main() -> std::io::Result<()> {
         body text,
         created text,
         mode text,
-        time_frame text
+        time_frame text,
+        hidden text
     );
     ";
 

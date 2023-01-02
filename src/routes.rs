@@ -188,6 +188,7 @@ async fn recurring_add(
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
                 );",
             [
@@ -197,6 +198,7 @@ async fn recurring_add(
                 &recurring.created,
                 &recurring.mode,
                 &recurring.time_frame,
+                "false",
             ],
         )
         .unwrap();
@@ -219,6 +221,7 @@ async fn announcements_add(
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
                 );",
             [
@@ -229,6 +232,7 @@ async fn announcements_add(
                 &announcement.body,
                 &announcement.id,
                 &announcement.expires,
+                "false",
             ],
         )
         .unwrap();
