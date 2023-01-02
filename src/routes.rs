@@ -44,7 +44,7 @@ async fn recurring_list(
         </div>
         <div class='title' onclick='update_recurring(\"{id}\", \"title\", \"{title}\")'>{title}</div>
         <div class='body' onclick='update_recurring(\"{id}\", \"body\", \"{body}\")'>{body}</div>
-        <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>{mode}</div>
+        <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>{time_frame}</div>
         <button style='color:Red' onclick='recur_daily(\"{id}\")'>Daily</button>
         <button style='color:Orange' onclick='recur_weekly(\"{id}\")'>Weekly</button>
         <button style='color:#770' onclick='recur_monthly(\"{id}\")'>Monthly</button>
