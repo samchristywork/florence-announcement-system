@@ -1,6 +1,7 @@
 use crate::announcement::Announcement;
 use crate::recurring::Recurring;
 use actix_web::{get, post, web, Responder};
+use chrono::{DateTime, Duration};
 use serde::Deserialize;
 use std::sync::Arc;
 
@@ -23,14 +24,23 @@ async fn recurring_list(
                 let mode = row.get::<usize, String>(4).unwrap();
                 let time_frame = row.get::<usize, String>(5).unwrap();
 
+                let now_plus_five = DateTime::parse_from_str(format!("{} +0600", created)
+                    .as_str(), "%m/%d/%Y, %l:%M:%S %p CT %z")
+                    .unwrap() + Duration::days(5);
+
+                let next = format!("{}", now_plus_five
+                    .format("%-m/%-d/%Y, %l:%M:%S %p CT")
+                    .to_string());
+
                 ret += format!(
                     "<div class='recurring'>
         <div class='date'>
-          <div>Created: {created}</div>
+          <div>From: {created}</div>
+          <div>Next: {next}</div>
         </div>
         <div class='title' onclick='update_recurring(\"{id}\", \"title\", \"{title}\")'>{title}</div>
         <div class='body' onclick='update_recurring(\"{id}\", \"body\", \"{body}\")'>{body}</div>
-        <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>{mode} * Happens Every Tuesday, triggered next at Sat Dec 31 12:56:52 AM CST 2022</div>
+        <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>{mode}</div>
         <button style='color:Red' onclick='recur_daily(\"{id}\")'>Daily</button>
         <button style='color:Orange' onclick='recur_weekly(\"{id}\")'>Weekly</button>
         <button style='color:#770' onclick='recur_monthly(\"{id}\")'>Monthly</button>

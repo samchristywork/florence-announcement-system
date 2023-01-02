@@ -40,8 +40,8 @@ function add_recurring() {
           "title": title,
           "body": body,
           "created": d.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT",
-          "mode": "daily",
-          "time_frame": "2:00",
+          "mode": "Not Set",
+          "time_frame": "Not Set",
         }
       )
   };
