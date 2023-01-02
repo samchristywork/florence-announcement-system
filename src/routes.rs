@@ -122,34 +122,73 @@ async fn announcements_list(
                     return Ok(());
                 }
 
-                ret += format!(
-                    "<div class='announcement-{}'>
+                let hide = row.get::<usize, String>(7).unwrap();
+                let view_class = match hide.as_str() {
+                    "true" => "announcement-hidden",
+                    _ => "",
+                };
+
+                if publish_status.to_string() == "published" {
+                    ret += format!(
+                        "<div class='announcement-{} {view_class}'>
         <div class='date'>
           <div>Created: {}</div>
           <div>Expires: {}</div>
           <div>Scheduled: {}</div>
         </div>
-        <div class='title' onclick='update_announcement(\"{id}\", \"title\", \"{}\")'>{}</div>
+        <div style='display: grid; grid-template-columns: 1fr 1fr'>
+          <div class='title' onclick='update_announcement(\"{id}\", \"title\", \"{}\")'>{}</div>
+        </div>
+        <div class='body' onclick='update_announcement(\"{id}\", \"body\", \"{}\")'>{}</div>
+        <button style='color:red' onclick='set_state(\"{id}\", \"neutral\")'>Un-Publish</button>
+        <button style='color:maroon' onclick='delete_announcement(\"{id}\")'>Delete</button>
+        <button style='color:blue' onclick='hide_announcement(\"{id}\")'>Hide</button>
+        <button style='color:blue' onclick='unhide_announcement(\"{id}\")' class='unhide'>Unhide</button>
+        <div class='id'>{id}</div>
+      </div>",
+                        row.get::<usize, String>(0).unwrap(), // status
+                        row.get::<usize, String>(1).unwrap(), // created
+                        row.get::<usize, String>(6).unwrap(), // expires
+                        row.get::<usize, String>(2).unwrap(), // scheduled
+                        row.get::<usize, String>(3).unwrap(), // title
+                        row.get::<usize, String>(3).unwrap(), // title
+                        row.get::<usize, String>(4).unwrap(), // body
+                        row.get::<usize, String>(4).unwrap(), // body
+                    )
+                    .as_str();
+                } else {
+                    ret += format!(
+                        "<div class='announcement-{} {view_class}'>
+        <div class='date'>
+          <div>Created: {}</div>
+          <div>Expires: {}</div>
+          <div>Scheduled: {}</div>
+        </div>
+        <div style='display: grid; grid-template-columns: 1fr 1fr'>
+          <div class='title' onclick='update_announcement(\"{id}\", \"title\", \"{}\")'>{}</div>
+        </div>
         <div class='body' onclick='update_announcement(\"{id}\", \"body\", \"{}\")'>{}</div>
         <button style='color:green' onclick='set_state(\"{id}\", \"approved\")'>Approve</button>
         <button style='color:#770' onclick='update_schedule(\"{id}\")'>Schedule</button>
         <button style='color:orange' onclick='update_expiration(\"{id}\")'>Set Expiration</button>
         <button style='color:red' onclick='set_state(\"{id}\", \"denied\")'>Deny</button>
         <button style='color:maroon' onclick='delete_announcement(\"{id}\")'>Delete</button>
-        <button style='color:blue'>Hide</button>
+        <button style='color:blue' onclick='hide_announcement(\"{id}\")'>Hide</button>
+        <button style='color:blue' onclick='unhide_announcement(\"{id}\")' class='unhide'>Unhide</button>
         <button style='color:purple' onclick='set_state(\"{id}\", \"published\")'>Publish</button>
         <div class='id'>{id}</div>
       </div>",
-                    row.get::<usize, String>(0).unwrap(), // status
-                    row.get::<usize, String>(1).unwrap(), // created
-                    row.get::<usize, String>(6).unwrap(), // expires
-                    row.get::<usize, String>(2).unwrap(), // scheduled
-                    row.get::<usize, String>(3).unwrap(), // title
-                    row.get::<usize, String>(3).unwrap(), // title
-                    row.get::<usize, String>(4).unwrap(), // body
-                    row.get::<usize, String>(4).unwrap(), // body
-                )
-                .as_str();
+                        row.get::<usize, String>(0).unwrap(), // status
+                        row.get::<usize, String>(1).unwrap(), // created
+                        row.get::<usize, String>(6).unwrap(), // expires
+                        row.get::<usize, String>(2).unwrap(), // scheduled
+                        row.get::<usize, String>(3).unwrap(), // title
+                        row.get::<usize, String>(3).unwrap(), // title
+                        row.get::<usize, String>(4).unwrap(), // body
+                        row.get::<usize, String>(4).unwrap(), // body
+                    )
+                    .as_str();
+                }
 
                 Ok(())
             },
