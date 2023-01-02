@@ -14,7 +14,7 @@ async fn recurring_list(
     let mut count = 0;
     loop {
         match pool.get().unwrap().query_row(
-            "select * from recurring limit 1 offset ?",
+            "select * from recurring order by hidden asc limit 1 offset ?",
             [count],
             |row| {
                 let id = row.get::<usize, String>(0).unwrap();
@@ -78,7 +78,7 @@ async fn announcements_list(
     let mut count = 0;
     loop {
         match pool.get().unwrap().query_row(
-            "select * from announcements limit 1 offset ?",
+            "select * from announcements order by hidden asc limit 1 offset ?",
             [count],
             |row| {
                 let id = row.get::<usize, String>(5).unwrap();
@@ -144,7 +144,7 @@ async fn announcements_json(
     let mut count = 0;
     loop {
         match pool.get().unwrap().query_row(
-            "select * from announcements limit 1 offset ?",
+            "select * from announcements order by hidden asc limit 1 offset ?",
             [count],
             |row| {
                 let announcement = Announcement::new(
