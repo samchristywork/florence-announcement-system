@@ -263,3 +263,28 @@ function delete_recur(id) {
         });
   }
 }
+
+function hide_announcement(id) {
+  const options = {
+      method: 'POST',
+  };
+
+  fetch('./announcements/hide/'+id+'/true', options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
+function hide_recurring(id) {
+  const options = {
+      method: 'POST',
+  };
+
+  fetch('./recurring/hide/'+id+'/true', options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
