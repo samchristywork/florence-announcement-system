@@ -162,6 +162,26 @@ async fn announcements_list_published(
     ret
 }
 
+#[get("/announcements/list/unpublished")]
+async fn announcements_list_unpublished(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+) -> impl Responder {
+    let mut ret = String::new();
+
+    let mut count = 0;
+    loop {
+        match pool.get().unwrap().query_row(
+            "select * from announcements where status!='published' order by hidden asc limit 1 offset ?",
+            [count],
+            |row| {
+                let id = row.get::<usize, String>(5).unwrap();
+
+                let hide = row.get::<usize, String>(7).unwrap();
+                let view_class = match hide.as_str() {
+                    "true" => "announcement-hidden",
+                    _ => "",
+                };
+
                     ret += format!(
                         "<div class='announcement-{} {view_class}'>
         <div class='date'>
@@ -193,7 +213,6 @@ async fn announcements_list_published(
                         row.get::<usize, String>(4).unwrap(), // body
                     )
                     .as_str();
-                }
 
                 Ok(())
             },
