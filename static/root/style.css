@@ -241,6 +241,62 @@ body {
   padding-bottom: 0.5em;
   border-radius: 1em;
 }
+
+.switch {
+  display: inline-block;
+  position: relative;
+  height: 1em;
+  width: 2em;
+}
+
+.switch input {
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.slider {
+  background-color: grey;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition: .2s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: .8em;
+  width: .8em;
+  bottom: .1em;
+  left: .1em;
+  background-color: white;
+  transition: .2s;
+}
+
+input:checked + .slider {
+  background-color: #77f;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #77f;
+}
+
+input:checked + .slider:before {
+  transform: translateX(1em);
+}
+
+.slider.round {
+  border-radius: 1em;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 .unhide {
   display: none;
   color: green;
