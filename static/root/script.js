@@ -288,3 +288,26 @@ function hide_recurring(id) {
       });
 }
 
+function unhide_announcement(id) {
+  const options = {
+      method: 'POST',
+  };
+
+  fetch('./announcements/hide/'+id+'/false', options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
+
+function unhide_recurring(id) {
+  const options = {
+      method: 'POST',
+  };
+
+  fetch('./recurring/hide/'+id+'/false', options)
+      .then(response => response.text())
+      .then(response => {
+        location.reload();
+      });
+}
