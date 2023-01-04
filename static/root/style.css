@@ -241,3 +241,39 @@ body {
   padding-bottom: 0.5em;
   border-radius: 1em;
 }
+.unhide {
+  display: none;
+  color: green;
+}
+
+.announcement-hidden > .body {
+  display: none;
+}
+
+.announcement-hidden > button {
+  display: none;
+}
+
+.announcement-hidden > .date {
+  display: none;
+}
+
+.announcement-hidden > .unhide {
+  display: block;
+}
+
+.recur-hidden > .body {
+  display: none;
+}
+
+.recur-hidden > button {
+  display: none;
+}
+
+.recur-hidden > .date {
+  display: none;
+}
+
+.recur-hidden > .unhide {
+  display: block;
+}
