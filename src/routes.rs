@@ -100,29 +100,19 @@ async fn recurring_list(
     ret
 }
 
-#[get("/announcements/list/{publish_status}")]
-async fn announcements_list(
+#[get("/announcements/list/published")]
+async fn announcements_list_published(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
-    publish_status: web::Path<String>,
 ) -> impl Responder {
     let mut ret = String::new();
 
     let mut count = 0;
     loop {
         match pool.get().unwrap().query_row(
-            "select * from announcements order by hidden asc limit 1 offset ?",
+            "select * from announcements where status='published' order by hidden asc limit 1 offset ?",
             [count],
             |row| {
                 let id = row.get::<usize, String>(5).unwrap();
-                let status = row.get::<usize, String>(0).unwrap();
-
-                if publish_status.to_string() == "published" && status != "published" {
-                    return Ok(());
-                }
-
-                if publish_status.to_string() == "unpublished" && status == "published" {
-                    return Ok(());
-                }
 
                 let hide = row.get::<usize, String>(7).unwrap();
                 let view_class = match hide.as_str() {
@@ -130,7 +120,6 @@ async fn announcements_list(
                     _ => "",
                 };
 
-                if publish_status.to_string() == "published" {
                     ret += format!(
                         "<div class='announcement-{} {view_class}'>
         <div class='date'>
@@ -158,7 +147,21 @@ async fn announcements_list(
                         row.get::<usize, String>(4).unwrap(), // body
                     )
                     .as_str();
-                } else {
+
+                Ok(())
+            },
+        ) {
+            Ok(_) => {}
+            Err(_) => break,
+        }
+
+        count += 1;
+
+        ()
+    }
+    ret
+}
+
                     ret += format!(
                         "<div class='announcement-{} {view_class}'>
         <div class='date'>
