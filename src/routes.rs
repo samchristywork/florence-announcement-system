@@ -2,8 +2,14 @@ use crate::announcement::Announcement;
 use crate::recurring::Recurring;
 use actix_web::{get, post, web, Responder};
 use chrono::{DateTime, Duration};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::sync::Arc;
+//use chrono::format::strftime;
+
+struct Response {
+    announcements: Vec<Announcement>,
+    recurring: Vec<Recurring>,
+}
 
 #[get("/recurring/list")]
 async fn recurring_list(
@@ -251,6 +257,78 @@ async fn announcements_json(
                 );
 
                 ret.push(announcement);
+
+                Ok(())
+            },
+        ) {
+            Ok(_) => {}
+            Err(_) => break,
+        }
+
+        count += 1;
+
+        ()
+    }
+
+    web::Json(ret)
+}
+
+#[get("/all/")]
+async fn all_route(
+    pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
+) -> impl Responder {
+    let mut ret = Response {
+        announcements: Vec::new(),
+        recurring: Vec::new(),
+    };
+
+    let mut count = 0;
+    loop {
+        match pool.get().unwrap().query_row(
+            "select * from announcements order by hidden asc limit 1 offset ?",
+            [count],
+            |row| {
+                let announcement = Announcement::new(
+                    row.get::<usize, String>(3).unwrap(), // title
+                    row.get::<usize, String>(4).unwrap(), // body
+                    row.get::<usize, String>(1).unwrap(), // created
+                    row.get::<usize, String>(2).unwrap(), // scheduled
+                    row.get::<usize, String>(5).unwrap(), // id
+                    row.get::<usize, String>(0).unwrap(), // status
+                    row.get::<usize, String>(6).unwrap(), // expires
+                );
+
+                ret.announcements.push(announcement);
+
+                Ok(())
+            },
+        ) {
+            Ok(_) => {}
+            Err(_) => break,
+        }
+
+        count += 1;
+
+        ()
+    }
+
+    let mut count = 0;
+    loop {
+        match pool.get().unwrap().query_row(
+            "select * from recurring order by hidden asc limit 1 offset ?",
+            [count],
+            |row| {
+                let recurring = Recurring::new(
+                    row.get::<usize, String>(0).unwrap(), // id
+                    row.get::<usize, String>(1).unwrap(), // title
+                    row.get::<usize, String>(2).unwrap(), // body
+                    row.get::<usize, String>(3).unwrap(), // created
+                    row.get::<usize, String>(4).unwrap(), // mode
+                    row.get::<usize, String>(5).unwrap(), // time_frame
+                    row.get::<usize, String>(6).unwrap(), // hidden
+                );
+
+                ret.recurring.push(recurring);
 
                 Ok(())
             },
