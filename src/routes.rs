@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 //use chrono::format::strftime;
 
+#[derive(Deserialize, Serialize, Debug)]
 struct Response {
     announcements: Vec<Announcement>,
     recurring: Vec<Recurring>,
@@ -30,6 +31,7 @@ async fn recurring_list(
                 let mode = row.get::<usize, String>(4).unwrap();
                 let time_frame = row.get::<usize, String>(5).unwrap();
                 let hide = row.get::<usize, String>(6).unwrap();
+                let tags = row.get::<usize, String>(7).unwrap();
 
                 let mut next = DateTime::parse_from_str(format!("{} -0600", created)
                     .as_str(), "%m/%d/%Y, %l:%M:%S %p CT %z")
@@ -81,6 +83,7 @@ async fn recurring_list(
         <div style='display: grid; grid-template-columns: 1fr 1fr'>
           <div class='title' onclick='update_recurring(\"{id}\", \"title\", \"{title}\")'>{title}</div>
         </div>
+        <div class='tags' onclick=''>{tags}</div>
         <div class='body' onclick='update_recurring(\"{id}\", \"body\", \"{body}\")'>{body}</div>
         <div class='when' onclick='update_recurring(\"{id}\", \"time_frame\", \"{time_frame}\")'>Time Frame: {time_frame}</div>
         <button style='color:Green' onclick=''>Set Start Date</button>
@@ -136,6 +139,7 @@ async fn announcements_list_published(
         <div style='display: grid; grid-template-columns: 1fr 1fr'>
           <div class='title' onclick='update_announcement(\"{id}\", \"title\", \"{}\")'>{}</div>
         </div>
+        <div class='tags' onclick=''>{}</div>
         <div class='body' onclick='update_announcement(\"{id}\", \"body\", \"{}\")'>{}</div>
         <button style='color:red' onclick='set_state(\"{id}\", \"neutral\")'>Un-Publish</button>
         <button style='color:maroon' onclick='delete_announcement(\"{id}\")'>Delete</button>
@@ -149,6 +153,7 @@ async fn announcements_list_published(
                         row.get::<usize, String>(2).unwrap(), // scheduled
                         row.get::<usize, String>(3).unwrap(), // title
                         row.get::<usize, String>(3).unwrap(), // title
+                        row.get::<usize, String>(8).unwrap(), // tags
                         row.get::<usize, String>(4).unwrap(), // body
                         row.get::<usize, String>(4).unwrap(), // body
                     )
@@ -198,6 +203,7 @@ async fn announcements_list_unpublished(
         <div style='display: grid; grid-template-columns: 1fr 1fr'>
           <div class='title' onclick='update_announcement(\"{id}\", \"title\", \"{}\")'>{}</div>
         </div>
+        <div class='tags' onclick=''>{}</div>
         <div class='body' onclick='update_announcement(\"{id}\", \"body\", \"{}\")'>{}</div>
         <button style='color:green' onclick='set_state(\"{id}\", \"approved\")'>Approve</button>
         <button style='color:#770' onclick='update_schedule(\"{id}\")'>Schedule</button>
@@ -215,6 +221,7 @@ async fn announcements_list_unpublished(
                         row.get::<usize, String>(2).unwrap(), // scheduled
                         row.get::<usize, String>(3).unwrap(), // title
                         row.get::<usize, String>(3).unwrap(), // title
+                        row.get::<usize, String>(8).unwrap(), // tags
                         row.get::<usize, String>(4).unwrap(), // body
                         row.get::<usize, String>(4).unwrap(), // body
                     )
@@ -254,6 +261,7 @@ async fn announcements_json(
                     row.get::<usize, String>(5).unwrap(), // id
                     row.get::<usize, String>(0).unwrap(), // status
                     row.get::<usize, String>(6).unwrap(), // expires
+                    row.get::<usize, String>(7).unwrap(), // tags
                 );
 
                 ret.push(announcement);
