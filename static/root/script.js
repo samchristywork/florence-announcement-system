@@ -43,7 +43,7 @@ function add_recurring() {
           "created": d.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT",
           "mode": "Not Set",
           "time_frame": "Not Set",
-          "hiden": "false",
+          "hidden": "false",
           "tags": tags,
         }
       )
