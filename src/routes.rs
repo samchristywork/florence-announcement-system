@@ -285,10 +285,7 @@ async fn announcements_json(
 async fn all_route(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
 ) -> impl Responder {
-    let mut ret = Response {
-        announcements: Vec::new(),
-        recurring: Vec::new(),
-    };
+    let mut ret: Vec<Announcement> = Vec::new();
 
     let mut count = 0;
     loop {
@@ -307,7 +304,7 @@ async fn all_route(
                     row.get::<usize, String>(7).unwrap(), // tags
                 );
 
-                ret.announcements.push(announcement);
+                ret.push(announcement);
 
                 Ok(())
             },
@@ -327,17 +324,18 @@ async fn all_route(
             "select * from recurring order by hidden asc limit 1 offset ?",
             [count],
             |row| {
-                let recurring = Recurring::new(
-                    row.get::<usize, String>(0).unwrap(), // id
+                let announcement = Announcement::new(
                     row.get::<usize, String>(1).unwrap(), // title
                     row.get::<usize, String>(2).unwrap(), // body
                     row.get::<usize, String>(3).unwrap(), // created
-                    row.get::<usize, String>(4).unwrap(), // mode
-                    row.get::<usize, String>(5).unwrap(), // time_frame
-                    row.get::<usize, String>(6).unwrap(), // hidden
+                    String::new() + "SCHEDULED",
+                    row.get::<usize, String>(0).unwrap(), // id
+                    String::new() + "STATUS",
+                    String::new() + "EXPIRES",
+                    String::new() + "MYTAGS",
                 );
 
-                ret.recurring.push(recurring);
+                ret.push(announcement);
 
                 Ok(())
             },
