@@ -333,3 +333,39 @@ input:checked + .slider:before {
 .recur-hidden > .unhide {
   display: block;
 }
+
+.announcement-public {
+  position: relative;
+  color: var(--neutral-foreground);
+  background: var(--neutral-background);
+  border-radius: 1em;
+  border: 1px solid #777;
+  margin: 1em auto;
+  padding: 1em;
+}
+
+.announcement-public > div > .title::before {
+  content: "";
+}
+
+.announcement-public > .title {
+  font-size: 1.2rem;
+}
+
+.announcement-public > .body {
+  font-size: 0.8rem;
+  color: var(--neutral-body);
+  padding: 1em;
+}
+
+.announcement-public > .date {
+  font-size: 0.6rem;
+  text-align: right;
+  position: absolute;
+  right: 2em;
+}
+
+.tags {
+  font-size: 0.6rem;
+  font-family: monospace;
+}
