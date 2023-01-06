@@ -9,6 +9,7 @@ pub struct Announcement {
     pub id: String,
     pub status: String,
     pub expires: String,
+    pub tags: String,
 }
 
 impl Announcement {
@@ -20,6 +21,7 @@ impl Announcement {
         id: String,
         status: String,
         expires: String,
+        tags: String,
     ) -> Self {
         Self {
             title,
@@ -29,6 +31,7 @@ impl Announcement {
             id,
             status,
             expires,
+            tags,
         }
     }
 }

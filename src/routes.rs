@@ -296,6 +296,7 @@ async fn all_route(
                     row.get::<usize, String>(5).unwrap(), // id
                     row.get::<usize, String>(0).unwrap(), // status
                     row.get::<usize, String>(6).unwrap(), // expires
+                    row.get::<usize, String>(7).unwrap(), // tags
                 );
 
                 ret.announcements.push(announcement);
@@ -360,6 +361,7 @@ async fn recurring_add(
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
                 );",
             [
@@ -370,6 +372,7 @@ async fn recurring_add(
                 &recurring.mode,
                 &recurring.time_frame,
                 "false",
+                &recurring.tags,
             ],
         )
         .unwrap();
@@ -393,6 +396,7 @@ async fn announcements_add(
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
                 );",
             [
@@ -404,6 +408,7 @@ async fn announcements_add(
                 &announcement.id,
                 &announcement.expires,
                 "false",
+                &announcement.tags,
             ],
         )
         .unwrap();

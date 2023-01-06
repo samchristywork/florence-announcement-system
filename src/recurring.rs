@@ -8,6 +8,8 @@ pub struct Recurring {
     pub created: String,
     pub mode: String,
     pub time_frame: String,
+    pub hidden: String,
+    pub tags: String,
 }
 
 impl Recurring {
@@ -18,6 +20,8 @@ impl Recurring {
         created: String,
         mode: String,
         time_frame: String,
+        hidden: String,
+        tags: String,
     ) -> Self {
         Self {
             id,
@@ -26,6 +30,8 @@ impl Recurring {
             created,
             mode,
             time_frame,
+            hidden,
+            tags,
         }
     }
 }

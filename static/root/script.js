@@ -76,6 +76,7 @@ function add_announcement() {
           "id": Math.random().toString(16).substr(2, 8),
           "status": "neutral",
           "expires": d_plus_five.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT",
+          "tags": tags,
         }
       )
   };
