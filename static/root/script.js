@@ -23,6 +23,7 @@ fetch("./recurring/list")
 function add_recurring() {
   let title = window.prompt("Please enter a title for the recurring task:", "Some Title");
   let body = window.prompt("Please enter a recurring task body:", "Some Body");
+  let tags = window.prompt("Please enter a list of comma separated tags:", "sports, fundraising, food");
 
   var d = new Date();
   var d_plus_five = new Date(d);
@@ -42,6 +43,8 @@ function add_recurring() {
           "created": d.toLocaleString('en-US', { timeZone: 'America/Chicago' }) + " CT",
           "mode": "Not Set",
           "time_frame": "Not Set",
+          "hiden": "false",
+          "tags": tags,
         }
       )
   };
@@ -56,6 +59,7 @@ function add_recurring() {
 function add_announcement() {
   let title = window.prompt("Please enter a title for the announcement:", "Some Title");
   let body = window.prompt("Please enter an announcement body:", "Some Body");
+  let tags = window.prompt("Please enter a list of comma separated tags:", "sports, fundraising, food");
 
   var d = new Date();
   var d_plus_five = new Date(d);
