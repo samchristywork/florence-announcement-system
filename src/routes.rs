@@ -290,7 +290,7 @@ async fn all_route(
     let mut count = 0;
     loop {
         match pool.get().unwrap().query_row(
-            "select * from announcements order by hidden asc limit 1 offset ?",
+            "select * from announcements where status='published' order by hidden asc limit 1 offset ?",
             [count],
             |row| {
                 let announcement = Announcement::new(
