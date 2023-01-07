@@ -12,6 +12,54 @@ struct Response {
     recurring: Vec<Recurring>,
 }
 
+fn get_next_time(created: &str, time_frame: &str) -> Result<String, i32> {
+    let words = time_frame.split(" ").collect::<Vec<&str>>();
+
+    let mut next = DateTime::parse_from_str(
+        format!("{} -0600", created).as_str(),
+        "%m/%d/%Y, %l:%M:%S %p CT %z",
+    )
+    .unwrap();
+
+    while next < chrono::offset::Utc::now() {
+        next = next + Duration::days(1);
+    }
+
+    let mut found = false;
+
+    if words.get(0).unwrap() == &"Every" {
+        for _ in 1..60 {
+            if words
+                .get(1)
+                .unwrap()
+                .eq(&next.format("%A").to_string().as_str())
+            {
+                found = true;
+                break;
+            }
+
+            if words
+                .get(1)
+                .unwrap()
+                .eq(&next.format("%e").to_string().as_str())
+            {
+                found = true;
+                break;
+            }
+
+            next = next + Duration::days(1);
+        }
+    }
+
+    let mut next = format!("{}", next.format("%-m/%-d/%Y, %l:%M:%S %p CT").to_string());
+
+    if !found {
+        next = String::new() + "Incalculable";
+    }
+
+    Ok(next)
+}
+
 #[get("/recurring/list")]
 async fn recurring_list(
     pool: web::Data<Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>>,
