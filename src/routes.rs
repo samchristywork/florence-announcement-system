@@ -4,7 +4,6 @@ use actix_web::{get, post, web, Responder};
 use chrono::{DateTime, Duration};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
-//use chrono::format::strftime;
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Response {
@@ -81,41 +80,11 @@ async fn recurring_list(
                 let hide = row.get::<usize, String>(6).unwrap();
                 let tags = row.get::<usize, String>(7).unwrap();
 
-                let mut next = DateTime::parse_from_str(format!("{} -0600", created)
-                    .as_str(), "%m/%d/%Y, %l:%M:%S %p CT %z")
-                    .unwrap();
-
-                let words = time_frame.split(" ").collect::<Vec<&str>>();
-
-                while next < chrono::offset::Utc::now() {
-                    next = next + Duration::days(1);
-                }
-
-                let mut found = false;
-
-                if words.get(0).unwrap()==&"Every" {
-                    for _ in 1..60 {
-                        if words.get(1).unwrap().eq(&next.format("%A").to_string().as_str()) {
-                            found = true;
-                            break;
-                        }
-
-                        if words.get(1).unwrap().eq(&next.format("%e").to_string().as_str()) {
-                            found = true;
-                            break;
-                        }
-
-                        next = next + Duration::days(1);
-                    }
-                }
-
-                let mut next = format!("{}", next
-                    .format("%-m/%-d/%Y, %l:%M:%S %p CT")
-                    .to_string());
-
-                if !found {
-                    next = String::new() + "Incalculable";
-                }
+                let next =
+                    match get_next_time(created.as_str(), time_frame.as_str()){
+                        Ok(s) => s,
+                        Err(_) => String::new () + "Incalculable",
+                    };
 
                 let view_class = match hide.as_str() {
                     "true" => "recur-hidden",
