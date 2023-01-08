@@ -18,7 +18,7 @@ fn get_next_time(created: &str, time_frame: &str) -> Result<String, i32> {
         format!("{} -0600", created).as_str(),
         "%m/%d/%Y, %l:%M:%S %p CT %z",
     )
-    .unwrap();
+    .expect("Could not parse date.");
 
     while next < chrono::offset::Utc::now() {
         next = next + Duration::days(1);
@@ -26,11 +26,11 @@ fn get_next_time(created: &str, time_frame: &str) -> Result<String, i32> {
 
     let mut found = false;
 
-    if words.get(0).unwrap() == &"Every" {
+    if words.get(0).expect("Could not parse time frame.") == &"Every" {
         for _ in 1..60 {
             if words
                 .get(1)
-                .unwrap()
+                .expect("Could not parse time frame.")
                 .eq(&next.format("%A").to_string().as_str())
             {
                 found = true;
@@ -39,7 +39,7 @@ fn get_next_time(created: &str, time_frame: &str) -> Result<String, i32> {
 
             if words
                 .get(1)
-                .unwrap()
+                .expect("Could not parse time frame.")
                 .eq(&next.format("%e").to_string().as_str())
             {
                 found = true;
@@ -67,7 +67,7 @@ async fn recurring_list(
 
     let mut count = 0;
     loop {
-        match pool.get().unwrap().query_row(
+        match pool.get().expect("Could not get SQLite pool.").query_row(
             "select * from recurring order by hidden asc limit 1 offset ?",
             [count],
             |row| {
@@ -134,7 +134,7 @@ async fn announcements_list_published(
 
     let mut count = 0;
     loop {
-        match pool.get().unwrap().query_row(
+        match pool.get().expect("Could not get SQLite pool.").query_row(
             "select * from announcements where status='published' order by hidden asc limit 1 offset ?",
             [count],
             |row| {
@@ -199,7 +199,7 @@ async fn announcements_list_unpublished(
 
     let mut count = 0;
     loop {
-        match pool.get().unwrap().query_row(
+        match pool.get().expect("Could not get SQLite pool.").query_row(
             "select * from announcements where status!='published' order by hidden asc limit 1 offset ?",
             [count],
             |row| {
@@ -268,7 +268,7 @@ async fn announcements_json(
 
     let mut count = 0;
     loop {
-        match pool.get().unwrap().query_row(
+        match pool.get().expect("Could not get SQLite pool.").query_row(
             "select * from announcements order by hidden asc limit 1 offset ?",
             [count],
             |row| {
@@ -308,7 +308,7 @@ async fn all_route(
 
     let mut count = 0;
     loop {
-        match pool.get().unwrap().query_row(
+        match pool.get().expect("Could not get SQLite pool.").query_row(
             "select * from announcements where status='published' order by hidden asc limit 1 offset ?",
             [count],
             |row| {
@@ -339,7 +339,7 @@ async fn all_route(
 
     let mut count = 0;
     loop {
-        match pool.get().unwrap().query_row(
+        match pool.get().expect("Could not get SQLite pool.").query_row(
             "select * from recurring order by hidden asc limit 1 offset ?",
             [count],
             |row| {
@@ -377,7 +377,7 @@ async fn recurring_add(
     recurring: web::Json<Recurring>,
 ) -> impl Responder {
     pool.get()
-        .unwrap()
+        .expect("Could not get SQLite pool.")
         .execute(
             "insert into recurring values (
                 ?,
@@ -400,7 +400,7 @@ async fn recurring_add(
                 &recurring.tags,
             ],
         )
-        .unwrap();
+        .expect("Could not execute SQLite insert.");
 
     "Add successful"
 }
@@ -411,7 +411,7 @@ async fn announcements_add(
     announcement: web::Json<Announcement>,
 ) -> impl Responder {
     pool.get()
-        .unwrap()
+        .expect("Could not get SQLite pool.")
         .execute(
             "insert into announcements values (
                 ?,
@@ -436,7 +436,7 @@ async fn announcements_add(
                 &announcement.tags,
             ],
         )
-        .unwrap();
+        .expect("Could not execute SQLite insert.");
 
     "Add successful"
 }
@@ -447,9 +447,9 @@ async fn announcements_delete(
     id: web::Path<String>,
 ) -> impl Responder {
     pool.get()
-        .unwrap()
+        .expect("Could not get SQLite pool.")
         .execute("delete from announcements where id=?", [id.as_str()])
-        .unwrap();
+        .expect("Could not execute SQLite delete.");
 
     "Delete successful"
 }
@@ -463,9 +463,9 @@ async fn recurring_hide(
     let value = param.1.as_str();
 
     pool.get()
-        .unwrap()
+        .expect("Could not get SQLite pool.")
         .execute("update recurring set hidden=?1 where id=?2", (value, id))
-        .unwrap();
+        .expect("Could not execute SQLite update.");
 
     "Hide successful"
 }
@@ -479,12 +479,12 @@ async fn announcements_hide(
     let value = param.1.as_str();
 
     pool.get()
-        .unwrap()
+        .expect("Could not get SQLite pool.")
         .execute(
             "update announcements set hidden=?1 where id=?2",
             (value, id),
         )
-        .unwrap();
+        .expect("Could not execute SQLite update.");
 
     "Hide successful"
 }
@@ -495,9 +495,9 @@ async fn recurring_delete(
     id: web::Path<String>,
 ) -> impl Responder {
     pool.get()
-        .unwrap()
+        .expect("Could not get SQLite pool.")
         .execute("delete from recurring where id=?", [id.as_str()])
-        .unwrap();
+        .expect("Could not execute SQLite delete.");
 
     "Delete successful"
 }
@@ -521,7 +521,10 @@ async fn announcements_update(
         id.to_string()
     );
 
-    pool.get().unwrap().execute(sql.as_str(), []).unwrap();
+    pool.get()
+        .expect("Could not get SQLite pool.")
+        .execute(sql.as_str(), [])
+        .expect("Could not execute SQLite update.");
 
     "Change successful"
 }
@@ -539,7 +542,10 @@ async fn recurring_update(
         id.to_string()
     );
 
-    pool.get().unwrap().execute(sql.as_str(), []).unwrap();
+    pool.get()
+        .expect("Could not get SQLite pool.")
+        .execute(sql.as_str(), [])
+        .expect("Could not execute SQLite update.");
 
     "Change successful"
 }

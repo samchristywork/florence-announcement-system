@@ -45,7 +45,11 @@ async fn main() -> std::io::Result<()> {
     );
     ";
 
-    sqlite_pool.get().unwrap().execute_batch(query).unwrap();
+    sqlite_pool
+        .get()
+        .expect("Could not get SQLite pool.")
+        .execute_batch(query)
+        .expect("Could not execute query.");
 
     let pool_arc = Arc::new(sqlite_pool);
 
