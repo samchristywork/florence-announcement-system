@@ -347,7 +347,11 @@ async fn all_route(
                     row.get::<usize, String>(1).unwrap(), // title
                     row.get::<usize, String>(2).unwrap(), // body
                     row.get::<usize, String>(3).unwrap(), // created
-                    String::new() + "SCHEDULED",
+                    get_next_time(
+                        row.get::<usize, String>(3).unwrap().as_str(), // created
+                        row.get::<usize, String>(5).unwrap().as_str(), // time_frame
+                    )
+                    .unwrap(),
                     row.get::<usize, String>(0).unwrap(), // id
                     String::new() + "STATUS",
                     String::new() + "EXPIRES",
