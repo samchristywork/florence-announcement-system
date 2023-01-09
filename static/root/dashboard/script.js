@@ -13,9 +13,12 @@ fetch("./all/")
 
     for (let x of data) {
 
+      if (x.scheduled == "--") {
+        x.scheduled = x.created;
+      }
       html+=`<div class='announcement-public'>
         <div class='date'>
-          <div>Created: ${x.created}</div>
+          <div>Date: ${x.scheduled}</div>
         </div>
         <div style='display: grid; grid-template-columns: 1fr 1fr'>
           <div class='title'>${x.title}</div>
