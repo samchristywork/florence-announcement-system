@@ -79,6 +79,7 @@ async fn recurring_list(
                 let time_frame = row.get::<usize, String>(5).unwrap();
                 let hide = row.get::<usize, String>(6).unwrap();
                 let tags = row.get::<usize, String>(7).unwrap();
+                let expires = row.get::<usize, String>(8).unwrap();
 
                 let next =
                     match get_next_time(created.as_str(), time_frame.as_str()){
@@ -354,7 +355,7 @@ async fn all_route(
                     .unwrap(),
                     row.get::<usize, String>(0).unwrap(), // id
                     String::new() + "STATUS",
-                    String::new() + "EXPIRES",
+                    row.get::<usize, String>(8).unwrap(), // expires
                     String::new() + "MYTAGS",
                 );
 
@@ -391,6 +392,7 @@ async fn recurring_add(
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
                 );",
             [
@@ -402,6 +404,7 @@ async fn recurring_add(
                 &recurring.time_frame,
                 "false",
                 &recurring.tags,
+                "5 Days",
             ],
         )
         .expect("Could not execute SQLite insert.");

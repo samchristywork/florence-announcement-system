@@ -41,7 +41,8 @@ async fn main() -> std::io::Result<()> {
         mode text,
         time_frame text,
         hidden text,
-        tags text
+        tags text,
+        expires text
     );
     ";
 
