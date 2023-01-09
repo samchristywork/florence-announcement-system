@@ -342,6 +342,7 @@ input:checked + .slider:before {
   border: 1px solid #777;
   margin: 1em auto;
   padding: 1em;
+  max-width: 40em;
 }
 
 .announcement-public > div > .title::before {
