@@ -19,6 +19,7 @@ fetch("./all/")
       html+=`<div class='announcement-public'>
         <div class='date'>
           <div>Date: ${x.scheduled}</div>
+          <div>Expires: ${x.expires}</div>
         </div>
         <div style='display: grid; grid-template-columns: 1fr 1fr'>
           <div class='title'>${x.title}</div>
