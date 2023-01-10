@@ -37,10 +37,11 @@ fn get_next_time(created: &str, time_frame: &str) -> Result<String, i32> {
                 break;
             }
 
-            if words
-                .get(1)
-                .expect("Could not parse time frame.")
-                .eq(&next.format("%e").to_string().as_str())
+            if words.get(1).expect("Could not parse time frame.").eq(&next
+                .format("%e")
+                .to_string()
+                .as_str()
+                .trim())
             {
                 found = true;
                 break;
