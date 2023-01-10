@@ -27,7 +27,7 @@ fn get_next_time(created: &str, time_frame: &str) -> Result<String, i32> {
     let mut found = false;
 
     if words.get(0).expect("Could not parse time frame.") == &"Every" {
-        for _ in 1..60 {
+        for i in 1..60 {
             if words
                 .get(1)
                 .expect("Could not parse time frame.")
@@ -47,6 +47,10 @@ fn get_next_time(created: &str, time_frame: &str) -> Result<String, i32> {
             }
 
             next = next + Duration::days(1);
+
+            if i == 59 {
+                println!("Could not match {}", words.get(1).unwrap());
+            }
         }
     }
 
