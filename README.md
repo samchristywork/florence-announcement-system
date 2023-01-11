@@ -2,6 +2,13 @@
 
 ## Overview
 
+This is a simple announcement and news manager to help local government
+officials distribute news to residents.
+
+The end-goal is for this to be an API server for mobile apps, which is why the
+main public endpoint is JSON. Security will be important, but as of writing has
+not been built into the system.
+
 ## Screenshots
 
 ## Features
