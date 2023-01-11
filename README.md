@@ -11,6 +11,8 @@ not been built into the system.
 
 ## Screenshots
 
+<img alt="Admin panel screenshot" style="" src="./screenshots/admin_panel.png">
+
 ## Features
 
 - Stores data in a database for persistence and reliable data recall
